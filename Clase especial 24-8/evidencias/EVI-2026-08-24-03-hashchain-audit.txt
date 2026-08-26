@@ -1,0 +1,25 @@
+Evidencia: verificación de integridad de la cadena de hashes de auditoría
+Sistema: Sistema de Turnos (puerto 8001)
+
+$ python3 -c "
+from app.database import SessionLocal
+from app.audit import verify_chain
+db = SessionLocal()
+ok, broken = verify_chain(db)
+print('chain ok:', ok, 'broken id:', broken)
+"
+chain ok: True broken id: None
+
+Muestra de filas encadenadas (prev_hash -> entry_hash) de audit_log:
+
+id | prev_hash (12 primeros)  | entry_hash (12 primeros) | actor          | accion
+---|--------------------------|--------------------------|----------------|------------------
+1  | 000000000000...          | 0ed867a372dd...          | admin          | login_password_ok
+2  | 0ed867a372dd...          | 40a95803e580...          | admin          | mfa_enabled
+3  | 40a95803e580...          | b1ef59abe1cb...          | admin          | read
+7  | ...                      | ...                      | dlp-middleware | dlp_blocked
+10 | ...                      | ...                      | dlp-middleware | dlp_blocked
+
+Cada fila referencia el hash de la anterior; alterar cualquier campo de una fila
+histórica (incluso una ya "vieja") cambia su entry_hash y rompe la cadena para
+todas las filas posteriores, lo que detecta verify_chain() de inmediato.

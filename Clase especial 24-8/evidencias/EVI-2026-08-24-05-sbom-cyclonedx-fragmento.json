@@ -1,0 +1,238 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "metadata": {
+    "component": {}
+  },
+  "components_sample": [
+    {
+      "bom-ref": "Jinja2==3.1.4",
+      "description": "A very fast and expressive template engine.",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata Project-URL: Chat",
+          "type": "chat",
+          "url": "https://discord.gg/pallets"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Documentation",
+          "type": "documentation",
+          "url": "https://jinja.palletsprojects.com/"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Source",
+          "type": "other",
+          "url": "https://github.com/pallets/jinja/"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Donate",
+          "type": "other",
+          "url": "https://palletsprojects.com/donate"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Changes",
+          "type": "release-notes",
+          "url": "https://jinja.palletsprojects.com/changes/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "name": "License :: OSI Approved :: BSD License"
+          }
+        }
+      ],
+      "name": "Jinja2",
+      "purl": "pkg:pypi/jinja2@3.1.4",
+      "type": "library",
+      "version": "3.1.4"
+    },
+    {
+      "bom-ref": "MarkupSafe==3.0.3",
+      "description": "Safely add untrusted strings to HTML/XML markup.",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata Project-URL: Chat",
+          "type": "chat",
+          "url": "https://discord.gg/pallets"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Documentation",
+          "type": "documentation",
+          "url": "https://markupsafe.palletsprojects.com/"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Source",
+          "type": "other",
+          "url": "https://github.com/pallets/markupsafe/"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Donate",
+          "type": "other",
+          "url": "https://palletsprojects.com/donate"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Changes",
+          "type": "release-notes",
+          "url": "https://markupsafe.palletsprojects.com/page/changes/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "name": "MarkupSafe",
+      "purl": "pkg:pypi/markupsafe@3.0.3",
+      "type": "library",
+      "version": "3.0.3"
+    },
+    {
+      "bom-ref": "PyJWT==2.9.0",
+      "description": "JSON Web Token implementation in Python",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata: Home-page",
+          "type": "website",
+          "url": "https://github.com/jpadilla/pyjwt"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "PyJWT",
+      "purl": "pkg:pypi/pyjwt@2.9.0",
+      "type": "library",
+      "version": "2.9.0"
+    },
+    {
+      "bom-ref": "PyYAML==6.0.3",
+      "description": "YAML parser and emitter for Python",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata: Download-URL",
+          "type": "distribution",
+          "url": "https://pypi.org/project/PyYAML/"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Documentation",
+          "type": "documentation",
+          "url": "https://pyyaml.org/wiki/PyYAMLDocumentation"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Bug Tracker",
+          "type": "issue-tracker",
+          "url": "https://github.com/yaml/pyyaml/issues"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Mailing lists",
+          "type": "other",
+          "url": "http://lists.sourceforge.net/lists/listinfo/yaml-core"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Source Code",
+          "type": "other",
+          "url": "https://github.com/yaml/pyyaml"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: CI",
+          "type": "other",
+          "url": "https://github.com/yaml/pyyaml/actions"
+        },
+        {
+          "comment": "from packaging metadata: Home-page",
+          "type": "website",
+          "url": "https://pyyaml.org/"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "PyYAML",
+      "purl": "pkg:pypi/pyyaml@6.0.3",
+      "type": "library",
+      "version": "6.0.3"
+    },
+    {
+      "bom-ref": "SQLAlchemy==2.0.35",
+      "description": "Database Abstraction Library",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata Project-URL: Documentation",
+          "type": "documentation",
+          "url": "https://docs.sqlalchemy.org"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Issue Tracker",
+          "type": "issue-tracker",
+          "url": "https://github.com/sqlalchemy/sqlalchemy/"
+        },
+        {
+          "comment": "from packaging metadata: Home-page",
+          "type": "website",
+          "url": "https://www.sqlalchemy.org"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "SQLAlchemy",
+      "purl": "pkg:pypi/sqlalchemy@2.0.35",
+      "type": "library",
+      "version": "2.0.35"
+    },
+    {
+      "bom-ref": "annotated-types==0.8.0",
+      "description": "Reusable constraint types to use with typing.Annotated",
+      "externalReferences": [
+        {
+          "comment": "from packaging metadata Project-URL: Source",
+          "type": "other",
+          "url": "https://github.com/annotated-types/annotated-types"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Changelog",
+          "type": "release-notes",
+          "url": "https://github.com/annotated-types/annotated-types/releases"
+        },
+        {
+          "comment": "from packaging metadata Project-URL: Homepage",
+          "type": "website",
+          "url": "https://github.com/annotated-types/annotated-types"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "acknowledgement": "declared",
+            "id": "MIT"
+          }
+        }
+      ],
+      "name": "annotated-types",
+      "purl": "pkg:pypi/annotated-types@0.8.0",
+      "type": "library",
+      "version": "0.8.0"
+    }
+  ],
+  "total_components": 61
+}

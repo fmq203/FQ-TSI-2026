@@ -1,0 +1,19 @@
+Evidencia: Step-up MFA en endpoint crítico POST /api/v1/turnos/{id}/completar
+Sistema: Sistema de Turnos (puerto 8001)
+Generado automáticamente a partir de una sesión real de prueba.
+
+--- Sin header X-MFA-Code ---
+$ curl -s -o /dev/null -w "status: %{http_code}\n" -X POST \
+    http://localhost:8001/api/v1/turnos/1/completar \
+    -H "Authorization: Bearer <token>"
+status: 401
+
+--- Con header X-MFA-Code válido (código TOTP fresco) ---
+$ curl -s -i -X POST http://localhost:8001/api/v1/turnos/1/completar \
+    -H "Authorization: Bearer <token>" \
+    -H "X-MFA-Code: 400841"
+HTTP/1.1 200 OK
+content-type: application/json
+
+Conclusión: el bearer token por sí solo no alcanza para ejecutar la acción crítica;
+se exige además un código TOTP fresco por header, revalidado en cada llamada.

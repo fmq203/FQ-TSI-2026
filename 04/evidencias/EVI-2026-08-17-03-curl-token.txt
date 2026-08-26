@@ -1,0 +1,84 @@
+=== Sin token (esperado 401) ===
+HTTP/1.1 401 UNAUTHORIZED
+Server: Werkzeug/3.1.8 Python/3.12.3
+Date: Mon, 17 Aug 2026 12:28:30 GMT
+Content-Type: application/json
+Content-Length: 26
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'none'; frame-ancestors 'none'
+Referrer-Policy: no-referrer
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Access-Control-Allow-Origin: https://app.mibanco.com
+Connection: close
+
+{"error":"No autorizado"}
+
+=== Con token invalido (esperado 401) ===
+HTTP/1.1 401 UNAUTHORIZED
+Server: Werkzeug/3.1.8 Python/3.12.3
+Date: Mon, 17 Aug 2026 12:28:30 GMT
+Content-Type: application/json
+Content-Length: 26
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'none'; frame-ancestors 'none'
+Referrer-Policy: no-referrer
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Access-Control-Allow-Origin: https://app.mibanco.com
+Connection: close
+
+{"error":"No autorizado"}
+
+=== Con token valido (esperado 200) ===
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.8 Python/3.12.3
+Date: Mon, 17 Aug 2026 12:28:30 GMT
+Content-Type: application/json
+Content-Length: 192
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'none'; frame-ancestors 'none'
+Referrer-Policy: no-referrer
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Access-Control-Allow-Origin: https://app.mibanco.com
+Connection: close
+
+[{"email":"ana.perez@mibanco.com","id":1,"nombre":"Ana Perez"},{"email":"luis.gomez@mibanco.com","id":2,"nombre":"Luis Gomez"},{"email":"marta.diaz@mibanco.com","id":3,"nombre":"Marta Diaz"}]
+
+=== Con token valido, filtrando por id=2 (esperado 200) ===
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.8 Python/3.12.3
+Date: Mon, 17 Aug 2026 12:28:30 GMT
+Content-Type: application/json
+Content-Length: 64
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'none'; frame-ancestors 'none'
+Referrer-Policy: no-referrer
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Access-Control-Allow-Origin: https://app.mibanco.com
+Connection: close
+
+{"email":"luis.gomez@mibanco.com","id":2,"nombre":"Luis Gomez"}
+
+=== Con token valido, id invalido / inyeccion (esperado 400) ===
+HTTP/1.1 400 BAD REQUEST
+Server: Werkzeug/3.1.8 Python/3.12.3
+Date: Mon, 17 Aug 2026 12:28:30 GMT
+Content-Type: application/json
+Content-Length: 36
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'none'; frame-ancestors 'none'
+Referrer-Policy: no-referrer
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Access-Control-Allow-Origin: https://app.mibanco.com
+Connection: close
+
+{"error":"Parametro 'id' invalido"}

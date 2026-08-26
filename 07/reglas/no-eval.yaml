@@ -1,0 +1,23 @@
+rules:
+  - id: no-eval-python
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Uso de eval() detectado. eval() ejecuta código arbitrario en tiempo de
+      ejecución y es una vía directa a Remote Code Execution (RCE) si el
+      argumento incluye, aunque sea parcialmente, entrada de usuario. Prohibido
+      por norma interna del equipo de seguridad (RSI). Reemplazar por
+      ast.literal_eval() (si solo se necesita parsear literales de Python) o
+      por una función de mapeo/parsing explícita para el caso de uso real.
+    metadata:
+      cwe:
+        - "CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')"
+      owasp:
+        - "A03:2021 - Injection"
+      category: security
+      confidence: HIGH
+      references:
+        - https://cwe.mitre.org/data/definitions/95.html
+      author: RSI - Banco Ficticio del Uruguay
+    patterns:
+      - pattern: eval(...)

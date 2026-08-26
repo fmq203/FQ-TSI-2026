@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Configurar MFA{% endblock %}
+{% block content %}
+<h1>Configurar autenticacion en dos pasos</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<p>Escanea este QR con Google Authenticator / Authy, o carga el secreto manualmente:</p>
+<img src="data:image/png;base64,{{ qr_b64 }}" alt="QR MFA" width="220">
+<p>Secreto manual: <code>{{ secret }}</code></p>
+<form method="post" action="/mfa/setup">
+  <label>Codigo de verificacion</label>
+  <input name="code" required maxlength="6" pattern="[0-9]{6}" autofocus>
+  <button type="submit">Activar MFA</button>
+</form>
+{% endblock %}

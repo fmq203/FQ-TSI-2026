@@ -1,0 +1,21 @@
+Evidencia: bloqueo del middleware DLP ante intento de extracción masiva / PII en claro
+Sistema: Sistema de Turnos (puerto 8001), endpoint GET /api/v1/pacientes
+
+--- Caso 1: solicitud "raw" con documento sin enmascarar (3 registros) ---
+$ curl -s "http://localhost:8001/api/v1/pacientes?raw=true" -H "Authorization: Bearer <token>"
+{"detail":"Bloqueado por politica DLP","violacion":"documento_identidad_en_texto_claro"}
+
+--- Caso 2: solicitud "raw" con más de 5 registros sin paginar (8 registros) ---
+$ curl -s "http://localhost:8001/api/v1/pacientes?raw=true" -H "Authorization: Bearer <token>"
+{"detail":"Bloqueado por politica DLP","violacion":"mas_de_5_registros_sin_paginacion"}
+
+--- Caso 3: uso normal (paginado + enmascarado) — permitido ---
+$ curl -s "http://localhost:8001/api/v1/pacientes" -H "Authorization: Bearer <token>"
+{"total":8,"page":1,"page_size":5,"registros":[
+  {"id":1,"paciente":"Paciente 0","documento":"12****70"},
+  {"id":2,"paciente":"Paciente 1","documento":"12****71"},
+  ...
+]}
+
+Ambos bloqueos quedaron registrados como evento crítico en la auditoría inmutable
+(actor "dlp-middleware", acción "dlp_blocked") — ver EVI-2026-08-24-03.

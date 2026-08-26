@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}Sistema de Facturacion{% endblock %}</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+  nav { display: flex; gap: 16px; margin-bottom: 24px; border-bottom: 1px solid #ddd; padding-bottom: 12px; }
+  nav a { text-decoration: none; color: #a3260a; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; font-size: 14px; }
+  input, select { padding: 6px; margin: 4px 0 12px; width: 100%; box-sizing: border-box; }
+  button { padding: 8px 16px; background: #a3260a; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  .flash { background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 16px; }
+  .error { background: #fdd; padding: 10px; border-radius: 4px; margin-bottom: 16px; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; }
+</style>
+</head>
+<body>
+{% if user %}
+<nav>
+  <a href="/">Facturas</a>
+  <a href="/admin/audit">Auditoria</a>
+  <span style="margin-left:auto">{{ user.username }} ({{ user.role }})</span>
+  <a href="/logout">Salir</a>
+</nav>
+{% endif %}
+{% block content %}{% endblock %}
+</body>
+</html>

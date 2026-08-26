@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Ver QR / semilla MFA{% endblock %}
+{% block content %}
+<h1>Tu código MFA</h1>
+<p>Este es el mismo secreto que ya tenías configurado (no se generó uno nuevo). Escaneá el QR o cargá la clave manual en tu app de autenticación.</p>
+<img src="data:image/png;base64,{{ qr_b64 }}" alt="QR MFA" width="220">
+<p>Secreto manual: <code>{{ secret }}</code></p>
+<a href="{{ volver }}"><button type="button">Volver a ingresar el código</button></a>
+{% endblock %}

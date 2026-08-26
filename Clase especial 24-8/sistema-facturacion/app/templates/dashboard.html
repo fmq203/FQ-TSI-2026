@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Facturas{% endblock %}
+{% block content %}
+<h1>Facturas</h1>
+{% if msg %}<div class="flash">{{ msg }}</div>{% endif %}
+<form method="post" action="/facturas/sincronizar">
+  <button type="submit">Sincronizar turnos completados (Sistema de Turnos)</button>
+</form>
+<table>
+<tr><th>ID</th><th>Turno #</th><th>Paciente</th><th>Medico</th><th>Fecha turno</th><th>Monto</th><th>Estado</th></tr>
+{% for f in facturas %}
+<tr>
+  <td>{{ f.id }}</td><td>{{ f.turno_id_externo }}</td><td>{{ f.paciente }}</td><td>{{ f.medico }}</td>
+  <td>{{ f.fecha_turno.strftime("%Y-%m-%d %H:%M") }}</td><td>${{ "%.2f"|format(f.monto) }}</td><td>{{ f.estado }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Turnos{% endblock %}
+{% block content %}
+<h1>Turnos</h1>
+{% if msg %}<div class="flash">{{ msg }}</div>{% endif %}
+<table>
+<tr><th>ID</th><th>Paciente</th><th>Medico</th><th>Fecha</th><th>Estado</th><th></th></tr>
+{% for t in turnos %}
+<tr>
+  <td>{{ t.id }}</td><td>{{ t.paciente }}</td><td>{{ t.medico }}</td>
+  <td>{{ t.fecha.strftime("%Y-%m-%d %H:%M") }}</td><td>{{ t.estado }}</td>
+  <td>
+    {% if t.estado != "completado" %}
+    <form method="post" action="/turnos/{{ t.id }}/completar" style="display:flex;gap:4px;margin:0">
+      <input name="mfa_code" placeholder="Codigo MFA" maxlength="6" required style="margin:0;width:110px">
+      <button type="submit">Completar</button>
+    </form>
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}
+</table>
+<h2>Nuevo turno</h2>
+<form method="post" action="/turnos/nuevo">
+  <label>Paciente</label><input name="paciente" required>
+  <label>Documento (CI)</label><input name="documento_paciente" required>
+  <label>Medico</label><input name="medico" required>
+  <label>Fecha y hora</label><input type="datetime-local" name="fecha" required>
+  <button type="submit">Crear</button>
+</form>
+{% endblock %}

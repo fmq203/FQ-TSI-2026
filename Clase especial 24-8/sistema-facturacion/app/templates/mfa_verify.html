@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Verificar MFA{% endblock %}
+{% block content %}
+<h1>Verificacion en dos pasos</h1>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<p>Ingresa el codigo de 6 digitos de tu app de autenticacion.</p>
+<form method="post" action="/mfa/verify">
+  <input name="code" required autofocus maxlength="6" pattern="[0-9]{6}">
+  <button type="submit">Verificar</button>
+</form>
+<p><a href="/mfa/show">¿Perdiste el acceso a tu app? Ver QR/semilla de nuevo</a></p>
+{% endblock %}
