@@ -103,3 +103,29 @@ nivel de socket, después de que el código de la aplicación ya terminó de
 correr. **Esa es la vulnerabilidad que solo aparece en ejecución**: no es
 un patrón de código inseguro, es un gap entre lo que el desarrollador
 programó y lo que la infraestructura de despliegue realmente permite.
+
+## 9. Verificación manual (2026-08-31)
+
+El estudiante reprodujo el escaneo manualmente, paso a paso, ejecutando él
+mismo cada comando (levantar la API, spider, active scan sobre `/health` y
+`/usuarios`) en lugar de que se corriera de forma automatizada:
+
+1. **Spider clásico contra la raíz** (`zap-baseline.py -t http://localhost:5000`):
+   confirmó en vivo la limitación ya documentada en la sección 2 — encontró
+   únicamente 3 URLs sintéticas (`/`, `/robots.txt`, `/sitemap.xml`), todas
+   404, sin descubrir `/health` ni `/usuarios`.
+   Evidencia: [`evidencias/EVI-2026-08-31-01-zap-spider-demo.json`](evidencias/EVI-2026-08-31-01-zap-spider-demo.json).
+2. **Active scan sobre `/health`**: 200 OK, **2 alertas Low** (Server header,
+   Cross-Origin-Resource-Policy) — idéntico al hallazgo original.
+   Evidencia: [`evidencias/EVI-2026-08-31-02a-zap-reporte-health.html`](evidencias/EVI-2026-08-31-02a-zap-reporte-health.html).
+3. **Active scan sobre `/usuarios?id=1`** con el token inyectado vía Replacer:
+   200 OK, **1 alerta Low** (Server header). Confirma que el mecanismo de
+   autenticación vía header `Authorization: Bearer` funciona correctamente
+   contra el escaneo activo.
+   Evidencia: [`evidencias/EVI-2026-08-31-02b-zap-reporte-usuarios.html`](evidencias/EVI-2026-08-31-02b-zap-reporte-usuarios.html).
+
+**Resultado:** los hallazgos son consistentes con la corrida del
+2026-08-26 (0 Alto, 0 Medio, 2 Bajo) — no hubo regresiones ni hallazgos
+nuevos entre ambas fechas. Repaldos JSON crudos de esta corrida:
+`evidencias/zap-reporte-health-manual.json`,
+`evidencias/zap-reporte-usuarios-manual.json`.
