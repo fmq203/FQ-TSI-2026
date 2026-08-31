@@ -1,0 +1,458 @@
+<title>Bitácora ZAP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --bg: #eef1f4;
+    --surface: #ffffff;
+    --surface-2: #e4e9ef;
+    --border: #d3dae2;
+    --text: #1a2230;
+    --text-dim: #5b6778;
+    --accent: #2f5fd6;
+    --accent-soft: #e4ebfd;
+    --pass: #1f9d6d;
+    --pass-soft: #e2f5ec;
+    --low: #b6741f;
+    --low-soft: #faeedd;
+    --med: #b5860f;
+    --med-soft: #f8f0da;
+    --high: #c23c3c;
+    --high-soft: #fbe6e6;
+    --shadow: 0 1px 2px rgba(26,34,48,.06), 0 8px 24px -12px rgba(26,34,48,.18);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0f1420;
+      --surface: #171d2b;
+      --surface-2: #1e2636;
+      --border: #2a3448;
+      --text: #e6ebf2;
+      --text-dim: #8fa0b7;
+      --accent: #6f97ff;
+      --accent-soft: #1d2740;
+      --pass: #46d69a;
+      --pass-soft: #12261f;
+      --low: #e3a542;
+      --low-soft: #2c2415;
+      --med: #e0bb4a;
+      --med-soft: #2c2716;
+      --high: #f07272;
+      --high-soft: #2c1717;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0f1420;
+    --surface: #171d2b;
+    --surface-2: #1e2636;
+    --border: #2a3448;
+    --text: #e6ebf2;
+    --text-dim: #8fa0b7;
+    --accent: #6f97ff;
+    --accent-soft: #1d2740;
+    --pass: #46d69a;
+    --pass-soft: #12261f;
+    --low: #e3a542;
+    --low-soft: #2c2415;
+    --med: #e0bb4a;
+    --med-soft: #2c2716;
+    --high: #f07272;
+    --high-soft: #2c1717;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -16px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 500px at 85% -10%, var(--accent-soft), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:"IBM Plex Serif", Georgia, "Times New Roman", serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.eyebrow,.tile-label,.badge,.step-index,.terminal-head,.result-label,th{
+    font-family:"IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  }
+  code, pre, .mono, .terminal pre, .stat-value, td.num{
+    font-family:"IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1{ text-wrap:balance; }
+  p{ text-wrap:pretty; }
+
+  .wrap{ max-width: 880px; margin:0 auto; padding: 3.5rem 1.5rem 5rem; }
+
+  a{ color: var(--accent); }
+
+  /* ---------- header ---------- */
+  header.hero{ margin-bottom: 3rem; }
+  .eyebrow{
+    font-weight:600; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--accent); margin: 0 0 .9rem;
+  }
+  h1{
+    font-weight:700; font-size: clamp(2.1rem, 5vw, 3rem); margin: 0 0 .6rem; letter-spacing:-.01em;
+  }
+  .sub{
+    color: var(--text-dim); font-size:1.05rem; max-width: 62ch; margin: 0 0 2rem;
+  }
+
+  .env-note{
+    display:flex; gap:.75rem; align-items:flex-start;
+    background: var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding: .9rem 1.1rem; box-shadow: var(--shadow); margin-bottom: 2rem;
+  }
+  .env-note .dot{
+    flex:none; width:.55rem; height:.55rem; border-radius:50%; background: var(--accent);
+    margin-top:.5rem;
+  }
+  .env-note p{ margin:0; font-size:.92rem; color: var(--text-dim); }
+  .env-note strong{ color: var(--text); font-weight:500; }
+
+  .stats{
+    display:grid; grid-template-columns: repeat(5, 1fr); gap:.75rem;
+  }
+  .stat{
+    background: var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding: 1rem .9rem; box-shadow: var(--shadow);
+  }
+  .stat-value{ font-size:1.7rem; font-weight:600; line-height:1; }
+  .stat-value.pass{ color: var(--pass); }
+  .stat-value.low{ color: var(--low); }
+  .tile-label{
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color: var(--text-dim);
+    margin-top:.4rem; display:block;
+  }
+
+  @media (max-width: 700px){
+    .stats{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- steps ---------- */
+  .process-head{ margin: 3.5rem 0 1.5rem; }
+  .process-head h2{ font-size:1.1rem; letter-spacing:.06em; text-transform:uppercase; color: var(--text-dim); font-weight:600; margin:0; }
+
+  .step{
+    display:grid; grid-template-columns: 3rem 1fr; gap: 1.1rem;
+    padding: 1.8rem 0; border-top:1px solid var(--border);
+    opacity: 1; transform: none;
+  }
+  .step.reveal{ opacity:0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; }
+  .step.reveal.in{ opacity:1; transform:none; }
+
+  .step-index{
+    font-weight:700; font-size:1.05rem; color: var(--accent); padding-top:.15rem;
+  }
+  .step h3{ margin:0 0 .5rem; font-size:1.3rem; font-weight:700; }
+  .step p{ margin: 0 0 1rem; color: var(--text); }
+  .step p.hint{ color: var(--text-dim); font-size:.94rem; }
+
+  .terminal{
+    background: var(--surface-2); border:1px solid var(--border); border-radius:10px;
+    overflow:hidden; margin: 0 0 .9rem; box-shadow: var(--shadow);
+  }
+  .terminal-head{
+    display:flex; align-items:center; gap:.5rem;
+    padding:.5rem .8rem; border-bottom:1px solid var(--border);
+    font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color: var(--text-dim);
+  }
+  .terminal-head::before{
+    content:"›_"; color: var(--accent); font-family:"IBM Plex Mono",monospace; font-weight:600;
+  }
+  .terminal pre{
+    margin:0; padding: .9rem 1.1rem; font-size:.82rem; line-height:1.65;
+    overflow-x:auto; white-space:pre; color: var(--text);
+  }
+  .terminal .muted{ color: var(--text-dim); }
+  .terminal .warn{ color: var(--low); }
+  .terminal .ok{ color: var(--pass); }
+
+  .result{
+    display:flex; align-items:center; gap:.6rem;
+    border-radius:8px; padding:.55rem .9rem; font-size:.88rem;
+    border:1px solid transparent;
+  }
+  .result-label{
+    font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; font-weight:600;
+    padding:.15rem .5rem; border-radius:5px; flex:none;
+  }
+  .result--pass{ background: var(--pass-soft); color: var(--text); }
+  .result--pass .result-label{ background: var(--pass); color:#04140d; }
+  .result--low{ background: var(--low-soft); color: var(--text); }
+  .result--low .result-label{ background: var(--low); color:#2a1a02; }
+  .result--info{ background: var(--surface-2); color: var(--text-dim); border-color: var(--border); }
+  .result--info .result-label{ background: var(--border); color: var(--text); }
+
+  /* ---------- findings table ---------- */
+  .findings{ margin-top: 3.5rem; }
+  .table-scroll{ overflow-x:auto; border-radius:10px; border:1px solid var(--border); box-shadow: var(--shadow); }
+  table{ border-collapse: collapse; width:100%; min-width: 640px; background: var(--surface); }
+  th, td{ text-align:left; padding:.75rem .9rem; border-bottom:1px solid var(--border); font-size:.88rem; vertical-align:top; }
+  th{ font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color: var(--text-dim); background: var(--surface-2); }
+  tr:last-child td{ border-bottom:none; }
+  td.owasp{ font-family:"IBM Plex Mono",monospace; font-size:.8rem; color: var(--accent); white-space:nowrap; }
+
+  .badge{
+    display:inline-block; font-weight:600; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase;
+    padding:.2rem .5rem; border-radius:5px;
+  }
+  .badge.low{ background: var(--low-soft); color: var(--low); }
+
+  /* ---------- comparison ---------- */
+  .compare{
+    margin-top: 3rem; display:grid; grid-template-columns: 1fr 1fr; gap:1rem;
+  }
+  @media (max-width:600px){ .compare{ grid-template-columns:1fr; } }
+  .compare .card{
+    background: var(--surface); border:1px solid var(--border); border-radius:10px; padding:1.2rem 1.3rem;
+    box-shadow: var(--shadow);
+  }
+  .compare .card .date{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; color: var(--text-dim); }
+  .compare .card .who{ font-size:.85rem; color: var(--text-dim); margin-top:.15rem; }
+  .compare .card .tally{ display:flex; gap:1.2rem; margin-top:.9rem; }
+  .compare .card .tally div{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color: var(--text-dim); }
+  .compare .card .tally strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:1.3rem; color: var(--text); }
+  .no-regress{
+    display:flex; align-items:center; gap:.5rem; margin-top:1.6rem;
+    color: var(--pass); font-weight:600; font-size:.9rem;
+  }
+  .no-regress::before{ content:"✓"; }
+
+  /* ---------- reflection ---------- */
+  .reflection{
+    margin-top: 3rem; border-left: 3px solid var(--accent);
+    padding: .3rem 0 .3rem 1.3rem; font-style: italic; color: var(--text);
+  }
+  .reflection cite{ display:block; margin-top:.8rem; font-style:normal; font-size:.8rem; color: var(--text-dim); font-family:"IBM Plex Sans Condensed",sans-serif; letter-spacing:.04em; text-transform:uppercase; }
+
+  footer{
+    margin-top:4rem; padding-top:1.5rem; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem;
+    font-size:.78rem; color: var(--text-dim); font-family:"IBM Plex Mono",monospace;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .step.reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Banco Ficticio del Uruguay · RSI · Actividad 08</p>
+    <h1>Bitácora ZAP</h1>
+    <p class="sub">Escaneo dinámico (DAST) de la API de la Actividad&nbsp;4 con OWASP ZAP, reproducido a mano, comando por comando — 31 de agosto de 2026.</p>
+
+    <div class="env-note">
+      <span class="dot" aria-hidden="true"></span>
+      <p><strong>Nota de entorno:</strong> sin interfaz gráfica ni Java disponibles (WSL2), así que se usó ZAP en modo headless vía Docker (<code>ghcr.io/zaproxy/zaproxy:stable</code>) en lugar de la aplicación de escritorio.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-value">140</span><span class="tile-label">Reglas activas</span></div>
+      <div class="stat"><span class="stat-value">2/2</span><span class="tile-label">Endpoints cubiertos</span></div>
+      <div class="stat"><span class="stat-value pass">0</span><span class="tile-label">Hallazgos altos</span></div>
+      <div class="stat"><span class="stat-value pass">0</span><span class="tile-label">Hallazgos medios</span></div>
+      <div class="stat"><span class="stat-value low">2</span><span class="tile-label">Hallazgos bajos</span></div>
+    </div>
+  </header>
+
+  <div class="process-head"><h2>El proceso, paso a paso</h2></div>
+
+  <article class="step reveal">
+    <div class="step-index">01</div>
+    <div class="step-body">
+      <h3>Levantar la API objetivo</h3>
+      <p>Antes de escanear algo hace falta que esté corriendo. Se activó el entorno virtual de la Actividad&nbsp;4 y se generó un token de sesión para el endpoint protegido.</p>
+      <div class="terminal">
+        <div class="terminal-head">bash</div>
+        <pre><span class="muted">$</span> cd 04 &amp;&amp; source venv/bin/activate
+<span class="muted">$</span> export API_TOKEN=$(python -c 'import secrets;print(secrets.token_urlsafe(32))')
+<span class="muted">$</span> python app.py &amp;
+<span class="muted">$</span> curl http://localhost:5000/health</pre>
+      </div>
+      <div class="result result--pass"><span class="result-label">200 OK</span> API arriba — <code>{"status": "ok"}</code></div>
+    </div>
+  </article>
+
+  <article class="step reveal">
+    <div class="step-index">02</div>
+    <div class="step-body">
+      <h3>Preparar OWASP ZAP</h3>
+      <p>Se descargó la imagen oficial de ZAP y se confirmó que el contenedor arranca correctamente antes de lanzar cualquier ataque real.</p>
+      <div class="terminal">
+        <div class="terminal-head">bash</div>
+        <pre><span class="muted">$</span> docker pull ghcr.io/zaproxy/zaproxy:stable
+<span class="muted">$</span> docker run --rm ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py --help</pre>
+      </div>
+      <div class="result result--pass"><span class="result-label">Listo</span> Imagen descargada · <code>zap-full-scan.py</code> responde</div>
+    </div>
+  </article>
+
+  <article class="step reveal">
+    <div class="step-index">03</div>
+    <div class="step-body">
+      <h3>Spider — probar el descubrimiento automático</h3>
+      <p>Hipótesis a comprobar: al ser una API JSON pura sin páginas HTML, el spider clásico de ZAP (que sigue enlaces <code>&lt;a href&gt;</code>) no va a encontrar los endpoints reales por sí solo.</p>
+      <div class="terminal">
+        <div class="terminal-head">bash</div>
+        <pre><span class="muted">$</span> docker run --rm --network=host -v "$(pwd)/evidencias:/zap/wrk/:rw" \
+    ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+    -t http://localhost:5000 -J zap-spider-demo.json -I
+
+Total of 3 URLs
+<span class="muted">… 63 reglas pasivas PASS omitidas …</span>
+<span class="warn">WARN-NEW:</span> Server Leaks Version Information via "Server" Header [10036] x 3
+        http://localhost:5000 (404 Not Found)
+        http://localhost:5000/robots.txt (404 Not Found)
+        http://localhost:5000/sitemap.xml (404 Not Found)
+<span class="warn">WARN-NEW:</span> Storable and Cacheable Content [10049] x 3
+FAIL-NEW: 0  WARN-NEW: 2  <span class="ok">PASS: 65</span>
+Automation plan warnings: spider error accessing URL, status 404 expected 200</pre>
+      </div>
+      <div class="result result--info"><span class="result-label">Confirmado</span> El spider solo probó 3 rutas de cortesía (todas 404) — nunca vio <code>/health</code> ni <code>/usuarios</code></div>
+    </div>
+  </article>
+
+  <article class="step reveal">
+    <div class="step-index">04</div>
+    <div class="step-body">
+      <h3>Active scan directo sobre cada endpoint</h3>
+      <p>Ya que el spider no puede encontrar rutas de una API sin frontend, se apuntó el escaneo activo directamente a cada endpoint conocido por el código: el público (<code>/health</code>) y el protegido (<code>/usuarios</code>), este último inyectando el token vía el add-on <em>Replacer</em> de ZAP en cada petición.</p>
+
+      <p class="hint">4a · <code>/health</code> — público</p>
+      <div class="terminal">
+        <div class="terminal-head">bash</div>
+        <pre><span class="muted">$</span> docker run --rm --network=host -v "$(pwd)/evidencias:/zap/wrk/:rw" \
+    ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
+    -t "http://localhost:5000/health" \
+    -r zap-reporte-health.html -J zap-reporte-health.json -I
+
+Total of 5 URLs
+<span class="muted">… 137 reglas activas PASS omitidas …</span>
+<span class="warn">WARN-NEW:</span> Server Leaks Version Information via "Server" Header [10036] x 4
+        http://localhost:5000/health (200 OK)
+<span class="warn">WARN-NEW:</span> Cross-Origin-Resource-Policy Header Missing [90004] x 1
+        http://localhost:5000/health (200 OK)
+FAIL-NEW: 0  WARN-NEW: 2  <span class="ok">PASS: 139</span></pre>
+      </div>
+      <div class="result result--low"><span class="result-label">2 bajas</span> Header <code>Server</code> expuesto + falta <code>Cross-Origin-Resource-Policy</code></div>
+
+      <p class="hint" style="margin-top:1.4rem;">4b · <code>/usuarios?id=1</code> — protegido, con Bearer token inyectado</p>
+      <div class="terminal">
+        <div class="terminal-head">bash</div>
+        <pre><span class="muted">$</span> docker run --rm --network=host -v "$(pwd)/evidencias:/zap/wrk/:rw" \
+    ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
+    -t "http://localhost:5000/usuarios?id=1" \
+    -r zap-reporte-usuarios.html -J zap-reporte-usuarios.json -I \
+    -z "-config replacer.full_list(0).matchtype=REQ_HEADER <span class="muted">…</span>
+        -config replacer.full_list(0).matchstr=Authorization
+        -config replacer.full_list(0).replacement=Bearer\ $API_TOKEN"
+
+Total of 5 URLs
+<span class="muted">… 139 reglas activas PASS omitidas …</span>
+<span class="warn">WARN-NEW:</span> Server Leaks Version Information via "Server" Header [10036] x 4
+        http://localhost:5000/usuarios?id=1 (200 OK)
+FAIL-NEW: 0  WARN-NEW: 1  <span class="ok">PASS: 140</span></pre>
+      </div>
+      <div class="result result--low"><span class="result-label">1 baja</span> Autenticación vía Replacer funcionó (200 OK) · sin inyección SQL, XSS ni bypass entre las 140 reglas</div>
+    </div>
+  </article>
+
+  <div class="findings">
+    <div class="process-head"><h2>05 · 06 — Interpretar y mapear al OWASP Top 10</h2></div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Alerta</th><th>Dónde</th><th>Riesgo</th><th>OWASP / CWE</th><th>Corrección en Flask</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge low">Baja</span><br>Server Leaks Version Information</td>
+            <td><code>/health</code>, <code>/usuarios</code></td>
+            <td>Revela versión exacta de Werkzeug/Python; facilita buscar CVEs específicas antes de atacar.</td>
+            <td class="owasp">A05:2021<br>CWE-497</td>
+            <td>El código ya intenta <code>headers.pop("Server")</code>, pero Werkzeug lo reinyecta a nivel de socket. Hace falta gunicorn/uWSGI detrás de nginx con <code>server_tokens off;</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge low">Baja</span><br>Cross-Origin-Resource-Policy ausente</td>
+            <td><code>/health</code></td>
+            <td>Permite incrustación cross-origin del recurso (vector tipo Spectre). Impacto bajo: sin datos sensibles.</td>
+            <td class="owasp">A05:2021<br>CWE-693</td>
+            <td>Agregar <code>Cross-Origin-Resource-Policy: same-origin</code> en <code>set_security_headers()</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="process-head"><h2>07 · 08 — Exportar evidencia y documentar</h2></div>
+  <article class="step reveal" style="border-top:none; padding-top:0;">
+    <div class="step-index">→</div>
+    <div class="step-body">
+      <p>Los reportes se guardaron en <code>08/evidencias/</code> con nombre trazable y se agregó una sección nueva a <code>bitacora.md</code> confirmando la reproducción manual.</p>
+      <div class="terminal">
+        <div class="terminal-head">evidencias/</div>
+        <pre>EVI-2026-08-31-01-zap-spider-demo.json
+EVI-2026-08-31-02a-zap-reporte-health.html
+EVI-2026-08-31-02b-zap-reporte-usuarios.html
+zap-reporte-health-manual.json   <span class="muted">(respaldo crudo)</span>
+zap-reporte-usuarios-manual.json <span class="muted">(respaldo crudo)</span></pre>
+      </div>
+      <div class="result result--pass"><span class="result-label">Sincronizado</span> commit <code>e8cd373</code> → <code>main</code> en <strong>FQ-TSI-2026</strong></div>
+    </div>
+  </article>
+
+  <div class="compare">
+    <div class="card">
+      <div class="date">2026-08-26</div>
+      <div class="who">Corrida original</div>
+      <div class="tally">
+        <div>Alto<strong>0</strong></div>
+        <div>Medio<strong>0</strong></div>
+        <div>Bajo<strong>2</strong></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="date">2026-08-31</div>
+      <div class="who">Reproducción manual</div>
+      <div class="tally">
+        <div>Alto<strong>0</strong></div>
+        <div>Medio<strong>0</strong></div>
+        <div>Bajo<strong>2</strong></div>
+      </div>
+    </div>
+  </div>
+  <p class="no-regress">Mismos hallazgos en ambas fechas — sin regresiones</p>
+
+  <blockquote class="reflection">
+    <p>El código de <code>04/app.py</code> intenta explícitamente remover el header <code>Server</code>, y tanto Bandit como Semgrep (Actividad&nbsp;07) habrían dado por buena esa línea — ninguna de las dos ejecuta el código, solo lo leen. Sólo al mandar una petición HTTP real se descubrió que el header seguía presente, porque lo agrega el servidor de desarrollo a nivel de socket, después de que la aplicación ya terminó de correr. Esa es la vulnerabilidad que solo aparece en ejecución.</p>
+    <cite>Reflexión SAST vs DAST — bitácora, sección 8</cite>
+  </blockquote>
+
+  <footer>
+    <span>Actividad 08 · OWASP ZAP · DAST</span>
+    <span>FQ-TSI-2026 @ e8cd373</span>
+  </footer>
+
+</div>
+
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var steps = document.querySelectorAll('.step.reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    steps.forEach(function(s){ io.observe(s); });
+  } else {
+    document.querySelectorAll('.step.reveal').forEach(function(s){ s.classList.add('in'); });
+  }
+</script>

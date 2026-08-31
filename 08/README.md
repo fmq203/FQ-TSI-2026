@@ -38,3 +38,6 @@ endpoint (`-t`). Detalle en [bitacora.md](bitacora.md), sección 2.
 
 Resultados y análisis en [bitacora.md](bitacora.md) e [informe.md](informe.md);
 evidencias y reportes de ZAP en [evidencias/](evidencias/).
+
+Resumen visual del proceso (paso a paso, con comandos y resultados) en
+[presentacion.html](presentacion.html) — abrilo en el navegador.
