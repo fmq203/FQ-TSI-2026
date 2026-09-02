@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="780" fill="#ffffff"/>
+  <text x="600" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Laboratorio INFRA-10 — Mini-red de banco segmentada (Proxmox)</text>
+  <text x="600" y="56" text-anchor="middle" font-size="13" fill="#64748b">proxmox01 · bridges aislados vmbr11 (LAN) / vmbr12 (DMZ) · vmbr0 = red real</text>
+
+  <!-- WAN cloud -->
+  <ellipse cx="150" cy="200" rx="130" ry="80" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
+  <text x="150" y="190" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Internet</text>
+  <text x="150" y="208" text-anchor="middle" font-size="12" fill="#334155">(red real de casa)</text>
+  <text x="150" y="226" text-anchor="middle" font-size="11" fill="#64748b">192.168.0.0/24 · vmbr0</text>
+
+  <!-- Firewall -->
+  <rect x="430" y="130" width="220" height="150" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="540" y="158" text-anchor="middle" font-size="16" font-weight="700" fill="#78350f">OPNsense</text>
+  <text x="540" y="176" text-anchor="middle" font-size="12" fill="#78350f">VM opnrouter (firewall)</text>
+  <text x="540" y="200" text-anchor="middle" font-size="11" fill="#78350f">WAN vtnet0 · 192.168.0.162 (dhcp)</text>
+  <text x="540" y="218" text-anchor="middle" font-size="11" fill="#78350f">LAN vtnet1 · 10.10.10.254/24</text>
+  <text x="540" y="236" text-anchor="middle" font-size="11" fill="#78350f">OPT1 vtnet2 · 10.10.20.254/24</text>
+  <text x="540" y="260" text-anchor="middle" font-size="11" fill="#92400e">reglas: R1-R8 + R6b (pf)</text>
+
+  <!-- LAN box -->
+  <rect x="800" y="60" width="330" height="200" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="965" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#14532d">LAN interna — 10.10.10.0/24</text>
+  <text x="965" y="102" text-anchor="middle" font-size="10" fill="#166534">vmbr11 · DHCP 10.10.10.10-100</text>
+
+  <rect x="825" y="120" width="130" height="60" rx="6" fill="#ffffff" stroke="#16a34a"/>
+  <text x="890" y="142" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">Kali (cliente)</text>
+  <text x="890" y="158" text-anchor="middle" font-size="10" fill="#166534">10.10.10.16 (dhcp)</text>
+  <text x="890" y="172" text-anchor="middle" font-size="9" fill="#166534">Nmap · Wireshark</text>
+
+  <rect x="975" y="120" width="130" height="60" rx="6" fill="#ffffff" stroke="#16a34a"/>
+  <text x="1040" y="142" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">lab-srv-datos</text>
+  <text x="1040" y="158" text-anchor="middle" font-size="10" fill="#166534">10.10.10.20 (CT 210)</text>
+  <text x="1040" y="172" text-anchor="middle" font-size="9" fill="#166534">SSH · datos.txt</text>
+
+  <text x="815" y="230" font-size="10" fill="#166534">R5/R6/R6b: solo 80/443</text>
+  <text x="815" y="244" font-size="10" fill="#166534">hacia DMZ, resto libre a Internet</text>
+
+  <!-- DMZ box -->
+  <rect x="800" y="300" width="330" height="140" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="965" y="326" text-anchor="middle" font-size="15" font-weight="700" fill="#7f1d1d">DMZ — 10.10.20.0/24</text>
+  <text x="965" y="342" text-anchor="middle" font-size="10" fill="#991b1b">vmbr12</text>
+
+  <rect x="900" y="360" width="130" height="60" rx="6" fill="#ffffff" stroke="#dc2626"/>
+  <text x="965" y="382" text-anchor="middle" font-size="12" font-weight="600" fill="#7f1d1d">lab-web-dmz</text>
+  <text x="965" y="398" text-anchor="middle" font-size="10" fill="#991b1b">10.10.20.10 (CT 211)</text>
+  <text x="965" y="412" text-anchor="middle" font-size="9" fill="#991b1b">nginx :80</text>
+
+  <!-- Arrows -->
+  <line x1="280" y1="200" x2="428" y2="200" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="354" y="192" text-anchor="middle" font-size="10" fill="#334155">dhcp</text>
+
+  <line x1="650" y1="190" x2="798" y2="150" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="740" y="160" text-anchor="middle" font-size="10" fill="#166534">LAN</text>
+
+  <line x1="650" y1="230" x2="798" y2="360" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="735" y="310" text-anchor="middle" font-size="10" fill="#991b1b">OPT1 (DMZ)</text>
+
+  <line x1="965" y1="180" x2="965" y2="298" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+  <rect x="972" y="266" width="150" height="30" fill="#ffffff" opacity="0.95"/>
+  <text x="976" y="278" font-size="10" fill="#7f1d1d">R3: bloqueado</text>
+  <text x="976" y="291" font-size="10" fill="#7f1d1d">DMZ → LAN</text>
+
+  <line x1="280" y1="230" x2="898" y2="360" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)" opacity="0.55"/>
+  <rect x="430" y="290" width="230" height="16" fill="#ffffff" opacity="0.85"/>
+  <text x="545" y="302" text-anchor="middle" font-size="10" fill="#7f1d1d">R1: 80/443 desde Internet → DMZ</text>
+
+  <!-- Legend -->
+  <rect x="60" y="520" width="1080" height="235" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="80" y="548" font-size="14" font-weight="700" fill="#0f172a">Reglas de firewall aplicadas (pf, primer-match-gana)</text>
+
+  <text x="80" y="576" font-size="11.5" font-weight="700" fill="#334155">R1</text>
+  <text x="130" y="576" font-size="11.5" fill="#334155">WAN → DMZ (10.10.20.10), puertos 80/443 — permitir (sitio público accesible)</text>
+  <text x="80" y="596" font-size="11.5" font-weight="700" fill="#334155">R2</text>
+  <text x="130" y="596" font-size="11.5" fill="#334155">WAN → resto — denegar (todo lo demás del exterior bloqueado)</text>
+  <text x="80" y="616" font-size="11.5" font-weight="700" fill="#334155">R3</text>
+  <text x="130" y="616" font-size="11.5" fill="#334155">DMZ → LAN (10.10.10.0/24) — denegar (la DMZ jamás toca los datos internos)</text>
+  <text x="80" y="636" font-size="11.5" font-weight="700" fill="#334155">R4</text>
+  <text x="130" y="636" font-size="11.5" fill="#334155">DMZ → cualquiera, puertos 80/443 — permitir (el web server sale a actualizarse)</text>
+  <text x="80" y="656" font-size="11.5" font-weight="700" fill="#334155">R5</text>
+  <text x="130" y="656" font-size="11.5" fill="#334155">LAN → cualquiera — permitir (el cliente interno navega)</text>
+  <text x="80" y="676" font-size="11.5" font-weight="700" fill="#334155">R6</text>
+  <text x="130" y="676" font-size="11.5" fill="#334155">LAN → DMZ, puertos 80/443 — permitir (consulta el sitio web interno vía DMZ)</text>
+  <text x="80" y="700" font-size="11.5" font-weight="700" fill="#b45309">R6b</text>
+  <text x="130" y="694" font-size="11.5" fill="#b45309" font-weight="700">LAN → DMZ, resto de puertos — denegar</text>
+  <text x="130" y="708" font-size="11.5" fill="#b45309" font-weight="700">(corrección: cerró el SSH que Nmap encontró abierto)</text>
+  <text x="80" y="726" font-size="11.5" font-weight="700" fill="#334155">R7</text>
+  <text x="130" y="726" font-size="11.5" fill="#334155">cualquier interfaz → resto — denegar (regla por defecto)</text>
+
+  <text x="640" y="576" font-size="11.5" font-weight="700" fill="#334155">R8</text>
+  <text x="690" y="576" font-size="11.5" fill="#334155">LAN/DMZ → firewall, puerto 53 — permitir</text>
+  <text x="690" y="592" font-size="11.5" fill="#334155">(DNS, no estaba en la tabla original del PDF)</text>
+</svg>
